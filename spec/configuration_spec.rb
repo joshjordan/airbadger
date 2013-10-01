@@ -1,15 +1,13 @@
 require 'spec_helper'
 
 describe Airbadger::Configuration do
-  include Airbadger::Configuration
-
-  describe '#configure' do
+  describe '#configure_service' do
     it 'proxies the configuration block to a named Airbrake singleton' do
-      configure :BasicAirbrake do |config|
+      subject.configure_service :BasicAirbrake do |config|
         config.test_mode = true
       end
 
-      configure :Errbit do |config|
+      subject.configure_service :Errbit do |config|
         config.test_mode = true
         config.host = 'errbit.example.com'
       end
@@ -19,7 +17,7 @@ describe Airbadger::Configuration do
     end
 
     it 'accepts snake-cased service names and produces constants with proper class names' do
-      configure :basic_airbrake do |config|
+      subject.configure_service :basic_airbrake do |config|
         config.test_mode = true
       end
 
@@ -27,7 +25,7 @@ describe Airbadger::Configuration do
     end
 
     it 'rewrites the name "Airbrake" to "AirbrakeProxied" to avoid collisions' do
-      configure :airbrake do |config|
+      subject.configure_service :airbrake do |config|
         config.test_mode = true
       end
 
@@ -38,7 +36,7 @@ describe Airbadger::Configuration do
     it 'supports Honeybadger configuration from the Honeybadger gem rather than the Airbrake gem' do
       Airbadger::AirbrakeLoader.should_receive(:load_as).never
 
-      configure :honeybadger do |config|
+      subject.configure_service :honeybadger do |config|
         config.ignore_only = []
       end
 

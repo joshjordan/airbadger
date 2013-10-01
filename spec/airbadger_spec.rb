@@ -6,12 +6,13 @@ describe Airbadger do
       it 'proxies calls to all configured modules' do
         proxied_method.sub!('#', '')
 
-        Airbadger.configure :raygun do |config|
-          config.test_mode = true
-        end
-
-        Airbadger.configure :errbit do |config|
-          config.test_mode = true
+        Airbadger.configure do |c|
+          c.configure_service :raygun do |config|
+            config.test_mode = true
+          end
+          c.configure_service :errbit do |config|
+            config.test_mode = true
+          end
         end
 
         error = Exception.new('Some serious shit went down')
@@ -25,15 +26,14 @@ describe Airbadger do
   end
 
   it 'proxies calls to Airbrake to all loaded modules' do
-    Airbadger.configure :raygun do |config|
-      config.test_mode = true
+    Airbadger.configure do |c|
+      c.configure_service :raygun do |config|
+        config.test_mode = true
+      end
+      c.configure_service :errbit do |config|
+        config.test_mode = true
+      end
     end
-
-    Airbadger.configure :errbit do |config|
-      config.test_mode = true
-    end
-
-    Airbadger.setup_proxy!
 
     error = Exception.new('Some serious shit went down')
 
@@ -44,12 +44,13 @@ describe Airbadger do
   end
 
   it 'proxies calls to Honeybadger' do
-    Airbadger.configure :raygun do |config|
-      config.test_mode = true
-    end
-
-    Airbadger.configure :honeybadger do |config|
-      config.ignore_only = []
+    Airbadger.configure do |c|
+      c.configure_service :raygun do |config|
+        config.test_mode = true
+      end
+      c.configure_service :honeybadger do |config|
+        config.ignore_only = []
+      end
     end
 
     error = Exception.new('Some serious shit went down')

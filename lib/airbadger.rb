@@ -5,11 +5,14 @@ require 'airbadger/configuration'
 require 'airbadger/version'
 
 module Airbadger
-  extend Configuration
+  def self.configure(&block)
+    yield(configuration)
+    configuration.setup_proxy!
+  end
 
   def self.method_missing(method_name, *args, &block)
     if PROXIED_METHODS.include? method_name
-      loaded_modules.each do |loaded_module|
+      configuration.loaded_modules.each do |loaded_module|
         loaded_module.send(method_name, *args, &block)
       end
       return nil
@@ -20,4 +23,8 @@ module Airbadger
   private
 
   PROXIED_METHODS = [:notify, :notify_or_ignore]
+
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
 end

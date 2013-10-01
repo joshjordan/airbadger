@@ -34,7 +34,6 @@ RSpec.configure do |config|
   end
 
   config.before :each do
-    #todo: stop making the mistake I'm trying to correct; this should not be a singleton
-    Airbadger.loaded_modules.reject! { true }
+    Airbadger.instance_variable_set('@configuration', nil)
   end
 end

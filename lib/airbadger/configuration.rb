@@ -1,7 +1,7 @@
-module Airbadger::Configuration
+class Airbadger::Configuration
   include Airbadger::WarningSuppression
 
-  def configure(service_name, &block)
+  def configure_service(service_name, &block)
     service_name_for_check = service_name.to_s.split('_').collect{ |str| str[0] = str[0].upcase; str }.join
     loaded_module = if service_name_for_check != 'Honeybadger'
       ::Airbadger::AirbrakeLoader.load_as(service_name)
