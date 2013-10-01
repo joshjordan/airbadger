@@ -15,6 +15,7 @@ require 'airbadger'
 
 EXAMPLE_SERVICE_NAMES = [
   'Airbrake',
+  'AirbrakeProxied',
   'BasicAirbrake',
   'Errbit',
   'Raygun'

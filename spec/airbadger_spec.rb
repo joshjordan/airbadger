@@ -30,7 +30,7 @@ describe Airbadger do
       endpoint :raygun do |config|
         config.test_mode = true
       end
-      endpoint :errbit do |config|
+      endpoint :airbrake do |config|
         config.test_mode = true
       end
     end
@@ -38,7 +38,7 @@ describe Airbadger do
     error = Exception.new('Some serious shit went down')
 
     Raygun.should_receive(:notify).with(error)
-    Errbit.should_receive(:notify).with(error)
+    AirbrakeProxied.should_receive(:notify).with(error)
 
     Airbrake.notify(error)
   end
