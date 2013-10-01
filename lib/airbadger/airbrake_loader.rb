@@ -2,6 +2,8 @@ class Airbadger::AirbrakeLoader
   extend Airbadger::WarningSuppression
 
   def self.load_as(airbrake_alias)
+    airbrake_alias = airbrake_alias.to_s.split('_').collect{ |str| str[0] = str[0].upcase; str }.join
+    airbrake_alias = 'AirbrakeProxied' if airbrake_alias == 'Airbrake'
     old_loaded_features = $LOADED_FEATURES.count
     without_warnings do
       require 'airbrake'
