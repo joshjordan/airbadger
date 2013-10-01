@@ -9,9 +9,15 @@ class Airbadger::AirbrakeLoader
       #what about duping the Airbrake module instead of doing this repeated require thing?
       require 'airbrake'
     end
-    Object.const_set(airbrake_alias, Airbrake).tap do
+    Object.const_set(airbrake_alias, Airbrake).tap do |loaded_module|
+      loaded_modules.push(loaded_module)
+      loaded_module.const_set('Airbrake', loaded_module)
       Object.send(:remove_const, 'Airbrake')
       $LOADED_FEATURES.pop while old_loaded_features < $LOADED_FEATURES.count
     end
+  end
+
+  def self.loaded_modules
+    @loaded_modules ||= []
   end
 end
