@@ -1,7 +1,7 @@
 airbadger
 =========
 
-Report errors to Airbrake and Honeybadger while migrating from one to the other
+Report errors to multiple Airbrake-compatible APIs simultaneously. Useful for comparing services such as Airbrake, Honeybadger, Errbit, etc. side by side with the same data.
 
 Installation
 ============
