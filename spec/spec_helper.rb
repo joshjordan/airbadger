@@ -32,4 +32,9 @@ RSpec.configure do |config|
       Object.send(:remove_const, service_name) if Object.const_defined?(service_name)
     end
   end
+
+  config.before :each do
+    #todo: stop making the mistake I'm trying to correct; this should not be a singleton
+    Airbadger::AirbrakeLoader.loaded_modules.reject! { true }
+  end
 end

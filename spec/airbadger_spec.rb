@@ -23,4 +23,23 @@ describe Airbadger do
       end
     end
   end
+
+  it 'proxies calls to Airbrake to all loaded modules' do
+    Airbadger.configure :raygun do |config|
+      config.test_mode = true
+    end
+
+    Airbadger.configure :errbit do |config|
+      config.test_mode = true
+    end
+
+    Airbadger.setup_proxy!
+
+    error = Exception.new('Some serious shit went down')
+
+    Raygun.should_receive(:notify).with(error)
+    Errbit.should_receive(:notify).with(error)
+
+    Airbrake.notify(error)
+  end
 end
