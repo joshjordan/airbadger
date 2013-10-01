@@ -6,11 +6,11 @@ describe Airbadger do
       it 'proxies calls to all configured modules' do
         proxied_method.sub!('#', '')
 
-        Airbadger.configure do |c|
-          c.configure_service :raygun do |config|
+        Airbadger.configure do
+          configure_service :raygun do |config|
             config.test_mode = true
           end
-          c.configure_service :errbit do |config|
+          configure_service :errbit do |config|
             config.test_mode = true
           end
         end
@@ -26,11 +26,11 @@ describe Airbadger do
   end
 
   it 'proxies calls to Airbrake to all loaded modules' do
-    Airbadger.configure do |c|
-      c.configure_service :raygun do |config|
+    Airbadger.configure do
+      configure_service :raygun do |config|
         config.test_mode = true
       end
-      c.configure_service :errbit do |config|
+      configure_service :errbit do |config|
         config.test_mode = true
       end
     end
@@ -44,11 +44,11 @@ describe Airbadger do
   end
 
   it 'proxies calls to Honeybadger' do
-    Airbadger.configure do |c|
-      c.configure_service :raygun do |config|
+    Airbadger.configure do 
+      configure_service :raygun do |config|
         config.test_mode = true
       end
-      c.configure_service :honeybadger do |config|
+      configure_service :honeybadger do |config|
         config.ignore_only = []
       end
     end

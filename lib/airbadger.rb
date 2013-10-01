@@ -6,7 +6,7 @@ require 'airbadger/version'
 
 module Airbadger
   def self.configure(&block)
-    yield(configuration)
+    configuration.instance_eval(&block)
     configuration.setup_proxy!
   end
 
