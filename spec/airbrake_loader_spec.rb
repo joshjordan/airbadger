@@ -1,10 +1,14 @@
 require 'spec_helper'
 
 describe Airbadger::AirbrakeLoader do
+  include Airbadger::WarningSuppression
+
   describe '.load_as' do
     it 'loads a new Airbrake singleton with the given name' do
-      Airbadger::AirbrakeLoader.load_as('Errbit')
-      Airbadger::AirbrakeLoader.load_as('Raygun')
+      without_warnings do
+        Airbadger::AirbrakeLoader.load_as('Errbit')
+        Airbadger::AirbrakeLoader.load_as('Raygun')
+      end
 
       Errbit.should respond_to :notify
       Raygun.should respond_to :notify
