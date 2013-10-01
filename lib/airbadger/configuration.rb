@@ -7,12 +7,17 @@ module Airbadger::Configuration
       ::Airbadger::AirbrakeLoader.load_as(service_name)
     else
       without_warnings { require 'honeybadger' }
-      Airbadger::AirbrakeLoader.loaded_modules.push(Honeybadger)
       Honeybadger
+    end.tap do |loaded_module|
+      loaded_modules.push(loaded_module)
     end.configure(&block)
   end
 
   def setup_proxy!
     Object.const_set('Airbrake', Airbadger)
+  end
+
+  def loaded_modules
+    @loaded_modules ||= []
   end
 end

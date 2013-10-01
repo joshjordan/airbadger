@@ -35,6 +35,6 @@ RSpec.configure do |config|
 
   config.before :each do
     #todo: stop making the mistake I'm trying to correct; this should not be a singleton
-    Airbadger::AirbrakeLoader.loaded_modules.reject! { true }
+    Airbadger.loaded_modules.reject! { true }
   end
 end

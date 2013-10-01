@@ -9,7 +9,7 @@ module Airbadger
 
   def self.method_missing(method_name, *args, &block)
     if PROXIED_METHODS.include? method_name
-      Airbadger::AirbrakeLoader.loaded_modules.each do |loaded_module|
+      loaded_modules.each do |loaded_module|
         loaded_module.send(method_name, *args, &block)
       end
       return nil
