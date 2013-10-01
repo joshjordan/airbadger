@@ -42,4 +42,21 @@ describe Airbadger do
 
     Airbrake.notify(error)
   end
+
+  it 'proxies calls to Honeybadger' do
+    Airbadger.configure :raygun do |config|
+      config.test_mode = true
+    end
+
+    Airbadger.configure :honeybadger do |config|
+      config.ignore_only = []
+    end
+
+    error = Exception.new('Some serious shit went down')
+
+    Raygun.should_receive(:notify).with(error)
+    Honeybadger.should_receive(:notify).with(error)
+
+    Airbadger.notify(error)
+  end
 end

@@ -34,5 +34,15 @@ describe Airbadger::Configuration do
       defined?(Airbrake).should be_false
       defined?(AirbrakeProxied).should be_true
     end
+
+    it 'supports Honeybadger configuration from the Honeybadger gem rather than the Airbrake gem' do
+      Airbadger::AirbrakeLoader.should_receive(:load_as).never
+
+      configure :honeybadger do |config|
+        config.ignore_only = []
+      end
+
+      defined?(Honeybadger).should be_true
+    end
   end
 end
