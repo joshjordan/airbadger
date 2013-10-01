@@ -6,6 +6,7 @@ class Airbadger::AirbrakeLoader
     airbrake_alias = 'AirbrakeProxied' if airbrake_alias == 'Airbrake'
     old_loaded_features = $LOADED_FEATURES.count
     without_warnings do
+      #what about duping the Airbrake module instead of doing this repeated require thing?
       require 'airbrake'
     end
     Object.const_set(airbrake_alias, Airbrake).tap do
