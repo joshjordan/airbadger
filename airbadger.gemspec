@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Airbadger::VERSION
   spec.authors       = ["Josh Jordan"]
   spec.email         = ["josh.jordan@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{To ease the transition when trying out a new error monitoring service, Airbadger can report errors to multiple Airbrake API-compatible endpoints, such as Errbit and Raygun. Honeybadger is also supported.}
+  spec.summary       = %q{Reports errors to multiple Airbrake-compatible endpoints}
   spec.homepage      = ""
   spec.license       = "MIT"
 
