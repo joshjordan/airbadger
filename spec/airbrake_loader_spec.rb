@@ -28,5 +28,22 @@ describe Airbadger::AirbrakeLoader do
 
       Errbit.sender.last_notice.should include(now)
     end
+
+    it 'eager-loads Rails extensions when Rails is running' do
+      Rails = Module.new
+      without_warnings { described_class.load_as('Errbit') }
+
+      defined?(Errbit::Rails::ControllerMethods).should be_true
+      defined?(Errbit::Rails::JavascriptNotifier).should be_true
+
+      Object.send(:remove_const, 'Rails')
+    end
+
+    it 'does not load Rails extensions when Rails is not running' do
+      without_warnings { described_class.load_as('Errbit') }
+
+      defined?(Errbit::Rails::ControllerMethods).should be_false
+      defined?(Errbit::Rails::JavascriptNotifier).should be_false
+    end
   end
 end

@@ -4,8 +4,11 @@ class Airbadger::AirbrakeLoader
   end
 
   def load_aliased
-    without_recording_loaded_features { require 'airbrake' }
-    aliased_module.tap do |loaded_module|
+    without_recording_loaded_features do
+      load_airbrake!
+      load_airbrake_rails! if defined?(::Rails)
+    end
+    aliased_module.tap do
       preserve_namespaced_calls!
       remove_airbrake_from_global_namespace!
     end
@@ -17,6 +20,15 @@ class Airbadger::AirbrakeLoader
 
   def initialize(endpoint_alias)
     @endpoint_alias = endpoint_alias.sub(/^Airbrake$/, 'AirbrakeProxied')
+  end
+
+  def load_airbrake!
+    require 'airbrake'
+  end
+
+  def load_airbrake_rails!
+    require 'airbrake/rails/controller_methods'
+    require 'airbrake/rails/javascript_notifier'
   end
 
   def aliased_module
