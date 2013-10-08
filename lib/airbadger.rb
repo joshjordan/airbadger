@@ -1,30 +1,14 @@
 require 'airbadger/version'
 
-require 'airbadger/warning_suppression'
-require 'airbadger/airbrake_loader'
-require 'airbadger/configuration'
+require 'airbadger/proxying_error_collector'
+
+require 'airbrake'
+require 'honeybadger'
 
 module Airbadger
-  def self.configure(&block)
-    configuration.instance_eval(&block)
-    configuration.setup_proxy!
-  end
+  ERROR_COLLECTORS = [Airbrake, Honeybadger]
 
-  def self.method_missing(method_name, *args, &block)
-    if PROXIED_METHODS.include? method_name
-      configuration.loaded_endpoints.each do |endpoint|
-        endpoint.send(method_name, *args, &block)
-      end
-      return nil
-    end
-    super
-  end
-
-  private
-
-  PROXIED_METHODS = [:notify, :notify_or_ignore]
-
-  def self.configuration
-    @configuration ||= Configuration.new
+  ERROR_COLLECTORS.each do |error_collector|
+    error_collector.extend(ProxyingErrorCollector)
   end
 end

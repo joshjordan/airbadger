@@ -1,63 +1,26 @@
 require 'spec_helper'
 
-describe Airbadger do
-  ['#notify', '#notify_or_ignore'].each do |proxied_method|
-    describe proxied_method do
-      it 'proxies calls to all configured modules' do
-        proxied_method.sub!('#', '')
-
-        Airbadger.configure do
-          endpoint :raygun do |config|
-            config.test_mode = true
-          end
-          endpoint :errbit do |config|
+[Airbrake, Honeybadger].each do |error_api|
+  describe error_api do
+    ['#notify', '#notify_or_ignore'].each do |proxied_method|
+      describe proxied_method do
+        before :all do
+          Airbrake.configure do |config|
             config.test_mode = true
           end
         end
 
-        error = Exception.new('Some serious shit went down')
+        it 'proxies calls to Airbrake and Honeybadger' do
+          proxied_method.sub!('#', '')
 
-        Raygun.should_receive(proxied_method).with(error)
-        Errbit.should_receive(proxied_method).with(error)
+          error = Exception.new('Some serious shit went down')
 
-        Airbadger.send(proxied_method, error)
+          Airbrake.should_receive("#{proxied_method}_without_proxy").with(error)
+          Honeybadger.should_receive("#{proxied_method}_without_proxy").with(error)
+
+          error_api.send(proxied_method, error)
+        end
       end
     end
-  end
-
-  it 'proxies calls to Airbrake to all loaded modules' do
-    Airbadger.configure do
-      endpoint :raygun do |config|
-        config.test_mode = true
-      end
-      endpoint :airbrake do |config|
-        config.test_mode = true
-      end
-    end
-
-    error = Exception.new('Some serious shit went down')
-
-    Raygun.should_receive(:notify).with(error)
-    AirbrakeProxied.should_receive(:notify).with(error)
-
-    Airbrake.notify(error)
-  end
-
-  it 'proxies calls to Honeybadger' do
-    Airbadger.configure do 
-      endpoint :raygun do |config|
-        config.test_mode = true
-      end
-      endpoint :honeybadger do |config|
-        config.ignore_only = []
-      end
-    end
-
-    error = Exception.new('Some serious shit went down')
-
-    Raygun.should_receive(:notify).with(error)
-    Honeybadger.should_receive(:notify).with(error)
-
-    Airbadger.notify(error)
   end
 end
