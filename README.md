@@ -37,5 +37,6 @@ Contributing to airbadger
 Copyright
 =========
 
-Copyright (c) 2013 Josh Jordan. See LICENSE for further details.
+Copyright (c) 2014 Josh Jordan. See LICENSE for further details.
 
+<img src="https://ga-beacon.appspot.com/UA-54979717-1/joshjordan/quora-no-webp" width=0 height=0>
